@@ -1,4 +1,4 @@
-id,name,sex,power,fans,type
+id,name,sex,age,city,subgenre,label,manger,writing,beat
 Adam,Adam the Man,1,5,100,0
 Eva,Eva the Woman,2,5,200,0
 Abraham,Aba the Father,1,4,50,0
