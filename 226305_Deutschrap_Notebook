@@ -1,0 +1,43 @@
+---
+title: "226305_Deutschrap"
+output: html_notebook
+---
+
+
+```{r}
+# Laden der Packages:
+library("igraph")
+library("igraphdata")
+```
+
+```{r}
+# Einlesen der Edge- und Nodelist
+edges <- read.csv("https://raw.githubusercontent.com/marcelposa/226305_Deutschrap/master/226305_Deutschrap_Edgelist.csv", header=T, as.is=T, sep = ",")
+nodes <- read.csv("https://raw.githubusercontent.com/marcelposa/226305_Deutschrap/master/226305_Deutschrap_Nodelist.csv", header=T, as.is=T, sep = ",")
+```
+
+```{r}
+# Überprüfen der Daten
+head(edges)
+head(nodes)
+```
+
+```{r}
+# wandelt die Edgelist als Matrix um.
+edgematrix <-as.matrix(edges)
+```
+
+```{r}
+# erstellt ein igraph-Objekt
+deutschrap <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
+```
+
+```{r}
+# erstellt den Graphen mit dem Namen "Deutschrap"
+Deutschrap <- graph_from_data_frame(d=edges, vertices=nodes, directed=TRUE)
+```
+
+```{r}
+# zeichnet den Graphen "Deutschrap"
+plot(Deutschrap, edge.arrow.size=.3, layout=layout_with_kk, main="Pretest Deutschrap")
+```
