@@ -11,8 +11,8 @@ nodelist,
 id,Kürzel der Künstler (Kleinbuchstaben)
 name,Künstlername (korrekte Groß- und Kleinschreibung)
 sex,Geschlecht der Künstler (Werte: m/w/d)
-city,Herkunftsstadt der Künstler (Wert: Ort in Kleinbuchstaben)
-subgenre,Genauere Zuordnung innerhalb des Deutschraps (Werte: Subgenre in Kleinbuchstaben/ Nummerierung)
-label,Label der Künstler (Wert: Labelname in Kleinbuchstaben)
+city,Herkunftsstadt der Künstler (Wert: Ort in Groß- und Kleinschreibung)
+subgenre,Genauere Zuordnung innerhalb des Deutschraps (Werte: Subgenre in Groß- und Kleinschreibung / Nummerierung)
+label,Label der Künstler (Wert: Labelname in Groß- und Kleinschreibung)
 ,
 99,definiert fehlende Werte
