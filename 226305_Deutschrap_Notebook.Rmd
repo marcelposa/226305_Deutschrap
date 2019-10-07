@@ -1,0 +1,160 @@
+
+---
+title: "226305_Deutschrap"
+output: html_notebook
+editor_options: 
+  chunk_output_type: inline
+---
+
+
+```{r}
+# Laden der Packages
+library("igraph")
+library("igraphdata")
+library("visNetwork")
+```
+
+```{r}
+# Einlesen der Edge- und Nodelist
+edges <- read.csv("https://raw.githubusercontent.com/marcelposa/226305_Deutschrap/master/226305_Deutschrap_Edgelist.csv", header=T, as.is=T)
+nodes <- read.csv("https://raw.githubusercontent.com/marcelposa/226305_Deutschrap/master/226305_Deutschrap_Nodelist.csv", header=T, as.is=T)
+edgematrix <-as.matrix(edges)
+dr2010 <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
+dr2010
+
+```
+
+```{r}
+# Überprüfen der Daten
+head(edges)
+head(nodes)
+```
+
+```{r erstellt unser igraph objekt}
+
+
+edgematrix <-as.matrix(edges)
+dr <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
+dr
+plot(dr)
+```
+
+```{r }
+# Einstellungen für das Layout mit visgraph / Erstellt den Graphen mit visgraph
+E(dr)$arrow.size <- 0.1 # Die Pfeilspitzengröße bei gerichteten Netzwerken.
+E(dr)$color <- "grey" # Die Farbe der Kanten.
+V(dr)$color <- "red" # Die Farbe der Knoten.
+V(dr)$size <- 10 # Die Größe der Knoten.
+V(dr)$frame.color <- "transparent" # Der Rahmen der Knoten.
+V(dr)$label.color <- "black" # Die Farbe der Labels.
+visIgraph(dr, type = "full") 
+```
+
+```{r}
+list.vertex.attributes(dr)
+dr
+
+vertex_attr(dr)
+dr_city <- delete_vertices(dr, V(dr)[city != "Hamburg"])
+dr_city
+plot(dr_city)
+
+# Einstellungen für das Layout mit visgraph / Erstellt den Graphen mit visgraph
+E(dr_city)$arrow.size <- 0.1 # Die Pfeilspitzengröße bei gerichteten Netzwerken.
+E(dr_city)$color <- "grey" # Die Farbe der Kanten.
+V(dr_city)$color <- "red" # Die Farbe der Knoten.
+V(dr_city)$size <- 10 # Die Größe der Knoten.
+V(dr_city)$frame.color <- "transparent" # Der Rahmen der Knoten.
+V(dr_city)$label.color <- "black" # Die Farbe der Labels.
+visIgraph(dr_city, type = "full")
+
+```
+```{r}
+list.vertex.attributes(dr)
+dr
+
+vertex_attr(dr)
+dr_city <- delete_vertices(dr, V(dr)[city != "Berlin"])
+dr_city
+plot(dr_city)
+
+# Einstellungen für das Layout mit visgraph / Erstellt den Graphen mit visgraph
+E(dr_city)$arrow.size <- 0.1 # Die Pfeilspitzengröße bei gerichteten Netzwerken.
+E(dr_city)$color <- "grey" # Die Farbe der Kanten.
+V(dr_city)$color <- "red" # Die Farbe der Knoten.
+V(dr_city)$size <- 10 # Die Größe der Knoten.
+V(dr_city)$frame.color <- "transparent" # Der Rahmen der Knoten.
+V(dr_city)$label.color <- "black" # Die Farbe der Labels.
+visIgraph(dr_city, type = "full")
+
+```
+```{r}
+list.vertex.attributes(dr)
+dr
+
+vertex_attr(dr)
+dr_city <- delete_vertices(dr, V(dr)[city != "Stuttgart" & city != "Bietigheim-Bissingen" & city != "Reutlingen" & city != "Göppingen"])
+dr_city
+plot(dr_city)
+
+# Einstellungen für das Layout mit visgraph / Erstellt den Graphen mit visgraph
+E(dr_city)$arrow.size <- 0.1 # Die Pfeilspitzengröße bei gerichteten Netzwerken.
+E(dr_city)$color <- "grey" # Die Farbe der Kanten.
+V(dr_city)$color <- "red" # Die Farbe der Knoten.
+V(dr_city)$size <- 10 # Die Größe der Knoten.
+V(dr_city)$frame.color <- "transparent" # Der Rahmen der Knoten.
+V(dr_city)$label.color <- "black" # Die Farbe der Labels.
+visIgraph(dr_city, type = "full")
+
+```
+```{r}
+list.vertex.attributes(dr)
+dr
+
+vertex_attr(dr)
+dr_city <- delete_vertices(dr, V(dr)[city != "Frankfurt"])
+dr_city
+plot(dr_city)
+
+# Einstellungen für das Layout mit visgraph / Erstellt den Graphen mit visgraph
+E(dr_city)$arrow.size <- 0.1 # Die Pfeilspitzengröße bei gerichteten Netzwerken.
+E(dr_city)$color <- "grey" # Die Farbe der Kanten.
+V(dr_city)$color <- "red" # Die Farbe der Knoten.
+V(dr_city)$size <- 10 # Die Größe der Knoten.
+V(dr_city)$frame.color <- "transparent" # Der Rahmen der Knoten.
+V(dr_city)$label.color <- "black" # Die Farbe der Labels.
+visIgraph(dr_city, type = "full")
+
+```
+```{r}
+list.vertex.attributes(dr)
+dr
+
+vertex_attr(dr)
+dr_sex <- delete_vertices(dr, V(dr)[sex != "w"])
+dr_sex
+plot(dr_sex)
+
+# Einstellungen für das Layout mit visgraph / Erstellt den Graphen mit visgraph
+E(dr_sex)$arrow.size <- 0.1 # Die Pfeilspitzengröße bei gerichteten Netzwerken.
+E(dr_sex)$color <- "grey" # Die Farbe der Kanten.
+V(dr_sex)$color <- "red" # Die Farbe der Knoten.
+V(dr_sex)$size <- 10 # Die Größe der Knoten.
+V(dr_sex)$frame.color <- "transparent" # Der Rahmen der Knoten.
+V(dr_sex)$label.color <- "black" # Die Farbe der Labels.
+visIgraph(dr_sex, type = "full")
+
+```
+
+```{r}
+?cluster_walktrap
+dr
+dr_cluster <- cluster_walktrap(dr)
+modularity(dr_cluster)
+membership(dr_cluster)
+par(mfrow=c(1,1), mar=c(0,0,1,2))
+plot(gc, dr, edge.arrow.size=.2, main="Clusteranalyse des Gesamtnetzwerks")
+
+
+```
+
