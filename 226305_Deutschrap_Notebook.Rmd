@@ -1,160 +1,277 @@
-
 ---
-title: "226305_Deutschrap"
-output: html_notebook
-editor_options: 
-  chunk_output_type: inline
+title: "226305_Deutschrap_Notebook"
+output: html_document
 ---
 
+--- 
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+```{r} 
+# Laden der Packages 
+library("igraph") 
+library("igraphdata") 
+library("visNetwork") 
+``` 
 
-```{r}
-# Laden der Packages
-library("igraph")
-library("igraphdata")
-library("visNetwork")
-```
+```{r} 
+# Einlesen der Edge- und Nodelist 
+edges <- read.csv("https://raw.githubusercontent.com/marcelposa/226305_Deutschrap/master/226305_Deutschrap_Edgelist.csv", header=T, as.is=T) 
+nodes <- read.csv("https://raw.githubusercontent.com/marcelposa/226305_Deutschrap/master/226305_Deutschrap_Nodelist.csv", header=T, as.is=T) 
+edgematrix <-as.matrix(edges) 
+dr2010 <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T) 
+dr2010 
 
-```{r}
-# Einlesen der Edge- und Nodelist
-edges <- read.csv("https://raw.githubusercontent.com/marcelposa/226305_Deutschrap/master/226305_Deutschrap_Edgelist.csv", header=T, as.is=T)
-nodes <- read.csv("https://raw.githubusercontent.com/marcelposa/226305_Deutschrap/master/226305_Deutschrap_Nodelist.csv", header=T, as.is=T)
-edgematrix <-as.matrix(edges)
-dr2010 <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
-dr2010
+``` 
 
-```
+```{r} 
+# Überprüfen der Daten 
+head(edges) 
+head(nodes) 
+``` 
 
-```{r}
-# Überprüfen der Daten
-head(edges)
-head(nodes)
-```
-
-```{r erstellt unser igraph objekt}
+```{r erstellt unser igraph objekt} 
 
 
-edgematrix <-as.matrix(edges)
-dr <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
-dr
-plot(dr)
-```
+edgematrix <-as.matrix(edges) 
+dr <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T) 
+dr 
+plot(dr) 
+``` 
 
-```{r }
-# Einstellungen für das Layout mit visgraph / Erstellt den Graphen mit visgraph
-E(dr)$arrow.size <- 0.1 # Die Pfeilspitzengröße bei gerichteten Netzwerken.
-E(dr)$color <- "grey" # Die Farbe der Kanten.
-V(dr)$color <- "red" # Die Farbe der Knoten.
-V(dr)$size <- 10 # Die Größe der Knoten.
-V(dr)$frame.color <- "transparent" # Der Rahmen der Knoten.
-V(dr)$label.color <- "black" # Die Farbe der Labels.
+```{r } 
+# Gesamtnetzwerk; die Rapper mit den meisten indegrees werden mit rot hervorgehoben 
+# Einstellungen für das Layout mit visgraph / Erstellt den Graphen mit visgraph 
+E(dr)$arrow.size <- 0.1 # Die Pfeilspitzengröße bei gerichteten Netzwerken. 
+E(dr)$color <- "grey" # Die Farbe der Kanten. 
+V(dr)$color <- "azure3" # Die Farbe der Knoten. 
+V(dr)$size <- 10 # Die Größe der Knoten. 
+V(dr)$frame.color <- "transparent" # Der Rahmen der Knoten. 
+V(dr)$label.color <- "black" # Die Farbe der Labels. 
+V(dr)[name == "Bushido"]$color <- "red" # Die Farbe für Bushido. 
+V(dr)[name == "Summer Cem"]$color <- "red" # Die Farbe für Summer Cem 
+V(dr)[name == "RAF Camora"]$color <- "red" # Die Farbe für RAF Camora. 
+V(dr)[name == "Bonez MC"]$color <- "red" # Die Farbe für Bonez MC 
+V(dr)[name == "Gzuz"]$color <- "red" # Die Farbe für GZUZ 
+V(dr)[name == "Ufo361"]$color <- "red" # Die Farbe für Ufo 361 
+V(dr)[name == "Olexesh"]$color <- "red" # Die Farbe für Olexesh 
+V(dr)[name == "Capital Bra"]$color <- "red" # Die Farbe für Capital Bra. 
+V(dr)[name == "Kool Savas"]$color <- "red" # Die Farbe für Kool Savas. 
 visIgraph(dr, type = "full") 
-```
+``` 
 
-```{r}
-list.vertex.attributes(dr)
-dr
+```{r} 
+# Einlesen der Edge- und Nodelist 
+edges <- read.csv("https://raw.githubusercontent.com/marcelposa/226305_Deutschrap/master/226305_Deutschrap_Edgelist.csv", header=T, as.is=T) 
+nodes <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/deutschrap/nodes_all.csv", header=T, as.is=T) 
+edgematrix <-as.matrix(edges) 
+dr <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T) 
+dr 
+``` 
 
-vertex_attr(dr)
-dr_city <- delete_vertices(dr, V(dr)[city != "Hamburg"])
-dr_city
-plot(dr_city)
+```{r} 
+# Überprüfen der Daten 
+head(edges) 
+head(nodes) 
+``` 
 
-# Einstellungen für das Layout mit visgraph / Erstellt den Graphen mit visgraph
-E(dr_city)$arrow.size <- 0.1 # Die Pfeilspitzengröße bei gerichteten Netzwerken.
-E(dr_city)$color <- "grey" # Die Farbe der Kanten.
-V(dr_city)$color <- "red" # Die Farbe der Knoten.
-V(dr_city)$size <- 10 # Die Größe der Knoten.
-V(dr_city)$frame.color <- "transparent" # Der Rahmen der Knoten.
-V(dr_city)$label.color <- "black" # Die Farbe der Labels.
-visIgraph(dr_city, type = "full")
+```{r erstellt unser igraph objekt} 
 
-```
-```{r}
-list.vertex.attributes(dr)
-dr
-
-vertex_attr(dr)
-dr_city <- delete_vertices(dr, V(dr)[city != "Berlin"])
-dr_city
-plot(dr_city)
-
-# Einstellungen für das Layout mit visgraph / Erstellt den Graphen mit visgraph
-E(dr_city)$arrow.size <- 0.1 # Die Pfeilspitzengröße bei gerichteten Netzwerken.
-E(dr_city)$color <- "grey" # Die Farbe der Kanten.
-V(dr_city)$color <- "red" # Die Farbe der Knoten.
-V(dr_city)$size <- 10 # Die Größe der Knoten.
-V(dr_city)$frame.color <- "transparent" # Der Rahmen der Knoten.
-V(dr_city)$label.color <- "black" # Die Farbe der Labels.
-visIgraph(dr_city, type = "full")
-
-```
-```{r}
-list.vertex.attributes(dr)
-dr
-
-vertex_attr(dr)
-dr_city <- delete_vertices(dr, V(dr)[city != "Stuttgart" & city != "Bietigheim-Bissingen" & city != "Reutlingen" & city != "Göppingen"])
-dr_city
-plot(dr_city)
-
-# Einstellungen für das Layout mit visgraph / Erstellt den Graphen mit visgraph
-E(dr_city)$arrow.size <- 0.1 # Die Pfeilspitzengröße bei gerichteten Netzwerken.
-E(dr_city)$color <- "grey" # Die Farbe der Kanten.
-V(dr_city)$color <- "red" # Die Farbe der Knoten.
-V(dr_city)$size <- 10 # Die Größe der Knoten.
-V(dr_city)$frame.color <- "transparent" # Der Rahmen der Knoten.
-V(dr_city)$label.color <- "black" # Die Farbe der Labels.
-visIgraph(dr_city, type = "full")
-
-```
-```{r}
-list.vertex.attributes(dr)
-dr
-
-vertex_attr(dr)
-dr_city <- delete_vertices(dr, V(dr)[city != "Frankfurt"])
-dr_city
-plot(dr_city)
-
-# Einstellungen für das Layout mit visgraph / Erstellt den Graphen mit visgraph
-E(dr_city)$arrow.size <- 0.1 # Die Pfeilspitzengröße bei gerichteten Netzwerken.
-E(dr_city)$color <- "grey" # Die Farbe der Kanten.
-V(dr_city)$color <- "red" # Die Farbe der Knoten.
-V(dr_city)$size <- 10 # Die Größe der Knoten.
-V(dr_city)$frame.color <- "transparent" # Der Rahmen der Knoten.
-V(dr_city)$label.color <- "black" # Die Farbe der Labels.
-visIgraph(dr_city, type = "full")
-
-```
-```{r}
-list.vertex.attributes(dr)
-dr
-
-vertex_attr(dr)
-dr_sex <- delete_vertices(dr, V(dr)[sex != "w"])
-dr_sex
-plot(dr_sex)
-
-# Einstellungen für das Layout mit visgraph / Erstellt den Graphen mit visgraph
-E(dr_sex)$arrow.size <- 0.1 # Die Pfeilspitzengröße bei gerichteten Netzwerken.
-E(dr_sex)$color <- "grey" # Die Farbe der Kanten.
-V(dr_sex)$color <- "red" # Die Farbe der Knoten.
-V(dr_sex)$size <- 10 # Die Größe der Knoten.
-V(dr_sex)$frame.color <- "transparent" # Der Rahmen der Knoten.
-V(dr_sex)$label.color <- "black" # Die Farbe der Labels.
-visIgraph(dr_sex, type = "full")
-
-```
-
-```{r}
-?cluster_walktrap
-dr
-dr_cluster <- cluster_walktrap(dr)
-modularity(dr_cluster)
-membership(dr_cluster)
-par(mfrow=c(1,1), mar=c(0,0,1,2))
-plot(gc, dr, edge.arrow.size=.2, main="Clusteranalyse des Gesamtnetzwerks")
+edgematrix <-as.matrix(edges) 
+dr <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T) 
+dr 
+V(dr)$label <- V(dr)$name #damit die Namen statt der Labels im Netzwerk angezeigt werden 
+``` 
 
 
-```
+```{r} 
+plot(dr, layout=layout_nicely, vertex.label=NA) 
+``` 
+
+```{r} 
+# Einstellungen für das Layout mit visgraph / Erstellt den Graphen mit visgraph 
+E(dr)$arrow.size <- 0.1 # Die Pfeilspitzengröße bei gerichteten Netzwerken. 
+E(dr)$color <- "grey" # Die Farbe der Kanten. 
+V(dr)$color <- "red" # Die Farbe der Knoten. 
+V(dr)$size <- 10 # Die Größe der Knoten. 
+V(dr)$frame.color <- "transparent" # Der Rahmen der Knoten. 
+V(dr)$label.color <- "black" # Die Farbe der Labels. 
+visIgraph(dr, type = "full") 
+``` 
+
+```{r Gesamtnetzwerk Genre nach Farben} 
+# Einstellungen für das Layout mit visgraph / Erstellt den Graphen mit visgraph 
+E(dr)$arrow.size <- 0.1 # Die Pfeilspitzengröße bei gerichteten Netzwerken. 
+E(dr)$color <- "grey" # Die Farbe der Kanten. 
+V(dr)[subgenre == "Strassenrap"]$color <- "blue" # Die Farbe der Knoten. 
+V(dr)[subgenre == "Mainstream/Entertainment"]$color <- "red" # Die Farbe der Knote 
+V(dr)[subgenre == "Oldschool"]$color <- "green" # Die Farbe der Knoten. 
+V(dr)[subgenre == "Battlerap"]$color <- "yellow" # Die Farbe der Knote 
+V(dr)[subgenre == "Conscious"]$color <- "pink" # Die Farbe der Knoten. 
+V(dr)[subgenre == "Trap"]$color <- "black" # Die Farbe der Knote 
+V(dr)[subgenre == "Afrotrap/Dancehall"]$color <- "purple" # Die Farbe der Knoten. 
+V(dr)$size <- 10 # Die Größe der Knoten. 
+V(dr)$frame.color <- "transparent" # Der Rahmen der Knoten. 
+V(dr)$label.color <- "black" # Die Farbe der Labels. 
+visIgraph(dr, type = "full") 
+``` 
+
+```{r Kapitel 3: Teilnetzwerke Genre Strassenrap (delete_vertices)} 
+# Zeigt uns die Vertex-Attribute des Unternetzwerks "dr" an. 
+list.vertex.attributes(dr) 
+dr 
+vertex_attr(dr) 
+# entfernt alle außer Rapper mit Genre Strassenrap: 
+dr_strassenrap <- delete_vertices(dr, V(dr)[ subgenre != "Strassenrap"]) 
+# != alles auschließen bis auf == nur das ausschließen 
+dr_strassenrap 
+# Einstellungen für das Layout mit visgraph / Erstellt den Graphen mit visgraph 
+E(dr_strassenrap)$arrow.size <- 0.05 # Die Pfeilspitzengröße bei gerichteten Netzwerken. 
+E(dr_strassenrap)$color <- "grey" # Die Farbe der Kanten. 
+V(dr_strassenrap)$color <- "blue" # Die Farbe der Knoten. 
+V(dr_strassenrap)$size <- 10 # Die Größe der Knoten. 
+V(dr_strassenrap)$frame.color <- "transparent" # Der Rahmen der Knoten. 
+V(dr_strassenrap)$label.color <- "black" # Die Farbe der Labels. 
+visIgraph(dr_strassenrap, type = "full") 
+#visgraph ist wie plot in schön 
+``` 
+
+```{r Teilnetzwerke Strassenrap + Mainstream (delete_vertices)} 
+# Zeigt uns die Vertex-Attribute des Unternetzwerks "dr" an. 
+list.vertex.attributes(dr) 
+dr 
+vertex_attr(dr) 
+# entfernt alle außer Rapper mit Genre Strassenrap und Mainstream: 
+dr_sm <- delete_vertices(dr, V(dr)[ subgenre != "Strassenrap" & subgenre != "Mainstream/Entertainment"]) 
+dr_sm 
+# Einstellungen für das Layout mit visgraph / Erstellt den Graphen mit visgraph 
+E(dr_sm)$arrow.size <- 0.05 # Die Pfeilspitzengröße bei gerichteten Netzwerken. 
+E(dr_sm)$color <- "grey" # Die Farbe der Kanten. 
+V(dr_sm)[subgenre == "Strassenrap"]$color <- "blue" # Die Farbe der Knoten. 
+V(dr_sm)[subgenre == "Mainstream/Entertainment"]$color <- "red" # Die Farbe der Knote 
+V(dr_sm)$size <- 10 # Die Größe der Knoten. 
+V(dr_sm)$frame.color <- "transparent" # Der Rahmen der Knoten. 
+V(dr_sm)$label.color <- "black" # Die Farbe der Labels. 
+visIgraph(dr_sm, type = "full") 
+#plot in schön 
+``` 
+
+```{r Kapitel 3: Teilnetzwerke Genre Afrotrap/Dancehall (delete_vertices)} 
+# Zeigt uns die Vertex-Attribute des Unternetzwerks "dr" an. 
+list.vertex.attributes(dr) 
+dr 
+vertex_attr(dr) 
+# entfernt alle außer Rapper mit Genre Afrotrap/Dancehall: 
+dr_ad <- delete_vertices(dr, V(dr)[ subgenre != "Afrotrap/Dancehall"]) 
+# != alles auschließen bis auf == nur das ausschließen 
+dr_ad 
+# Einstellungen für das Layout mit visgraph / Erstellt den Graphen mit visgraph 
+E(dr_ad)$arrow.size <- 0.05 # Die Pfeilspitzengröße bei gerichteten Netzwerken. 
+E(dr_ad)$color <- "grey" # Die Farbe der Kanten. 
+V(dr_ad)$color <- "purple" # Die Farbe der Knoten. 
+V(dr_ad)$size <- 10 # Die Größe der Knoten. 
+V(dr_ad)$frame.color <- "transparent" # Der Rahmen der Knoten. 
+V(dr_ad)$label.color <- "black" # Die Farbe der Labels. 
+visIgraph(dr_ad, type = "full") 
+#visgraph ist wie plot in schön 
+``` 
+
+```{r Kapitel 3: Teilnetzwerke Genre Oldschool (delete_vertices)} 
+# Zeigt uns die Vertex-Attribute des Unternetzwerks "dr" an. 
+list.vertex.attributes(dr) 
+dr 
+vertex_attr(dr) 
+# entfernt alle außer Rapper mit Genre Oldschool: 
+dr_oldschool <- delete_vertices(dr, V(dr)[ subgenre != "Oldschool"]) 
+# != alles auschließen bis auf == nur das ausschließen 
+dr_oldschool 
+# Einstellungen für das Layout mit visgraph / Erstellt den Graphen mit visgraph 
+E(dr_oldschool)$arrow.size <- 0.05 # Die Pfeilspitzengröße bei gerichteten Netzwerken. 
+E(dr_oldschool)$color <- "grey" # Die Farbe der Kanten. 
+V(dr_oldschool)$color <- "green" # Die Farbe der Knoten. 
+V(dr_oldschool)$size <- 10 # Die Größe der Knoten. 
+V(dr_oldschool)$frame.color <- "transparent" # Der Rahmen der Knoten. 
+V(dr_oldschool)$label.color <- "black" # Die Farbe der Labels. 
+visIgraph(dr_oldschool, type = "full") 
+#visgraph ist wie plot in schön 
+``` 
+
+```{r Kapitel 3: Teilnetzwerke Genre Afrotrap/Dancehall und Mainstream/Entertainment (delete_vertices)} 
+# Zeigt uns die Vertex-Attribute des Unternetzwerks "dr" an. 
+list.vertex.attributes(dr) 
+dr 
+vertex_attr(dr) 
+# entfernt alle außer Rapper mit Genre Mainstream/Entertainment & Afrotrap/Dancehall: 
+dr_am <- delete_vertices(dr, V(dr)[ subgenre != "Afrotrap/Dancehall" & subgenre != "Mainstream/Entertainment"]) 
+# != alles auschließen bis auf == nur das ausschließen 
+dr_am 
+# Einstellungen für das Layout mit visgraph / Erstellt den Graphen mit visgraph 
+E(dr_am)$arrow.size <- 0.05 # Die Pfeilspitzengröße bei gerichteten Netzwerken. 
+E(dr_am)$color <- "grey" # Die Farbe der Kanten. 
+V(dr_am)[subgenre == "Afrotrap/Dancehall"]$color <- "purple" # Die Farbe der Knoten. 
+V(dr_am)[subgenre == "Mainstream/Entertainment"]$color <- "red" # Die Farbe der Knoten 
+V(dr_am)$size <- 10 # Die Größe der Knoten. 
+V(dr_am)$frame.color <- "transparent" # Der Rahmen der Knoten. 
+V(dr_am)$label.color <- "black" # Die Farbe der Labels. 
+visIgraph(dr_am, type = "full") 
+#visgraph ist wie plot in schön 
+``` 
+
+```{r Kapitel 3: Ego-Netzwerke Olexesh} 
+dr 
+ego1 <- make_ego_graph(dr, order=1, c("Olexesh")) 
+plot(ego1[[1]], layout=layout_nicely, edge.arrow.size=.1, ) 
+
+``` 
+
+```{r Kapitel 3: Ego-Netzwerke GZUZ} 
+dr 
+ego2 <- make_ego_graph(dr, order=1, c("Gzuz")) 
+plot(ego2[[1]], layout=layout_nicely, edge.arrow.size=.1) 
+``` 
+
+```{r Kapitel 3: Ego-Netzwerke Bushido} 
+dr 
+ego3 <- make_ego_graph(dr, order=1, c("Bushido")) 
+plot(ego3[[1]], layout=layout_nicely, edge.arrow.size=.1) 
+``` 
+
+```{r Kapitel 3: Ego-Netzwerke Summer Cem} 
+dr 
+ego4 <- make_ego_graph(dr, order=1, c("Summer Cem")) 
+plot(ego4[[1]], layout=layout_nicely, edge.arrow.size=.1) 
+``` 
+
+
+```{r Kapitel 3: Ego-Netzwerke RAF Camora} 
+dr 
+ego5 <- make_ego_graph(dr, order=1, c("RAF Camora")) 
+plot(ego5[[1]], layout=layout_nicely, edge.arrow.size=.1) 
+``` 
+
+```{r Kapitel 3: Ego-Netzwerke Bonez MC} 
+dr 
+ego6 <- make_ego_graph(dr, order=1, c("Bonez MC")) 
+plot(ego6[[1]], layout=layout_nicely, edge.arrow.size=.1) 
+``` 
+
+```{r Kapitel 3: Ego-Netzwerke Ufo 361} 
+dr 
+ego7 <- make_ego_graph(dr, order=1, c("Ufo361")) 
+plot(ego7[[1]], layout=layout_nicely, edge.arrow.size=.1) 
+``` 
+
+```{r Kapitel 3: Ego-Netzwerke Kool Savas} 
+dr 
+ego8 <- make_ego_graph(dr, order=1, c("Kool Savas")) 
+plot(ego8[[1]], layout=layout_nicely, edge.arrow.size=.1) 
+``` 
+
+
+```{r Kapitel 3: Ego-Netzwerke Capital Bra} 
+dr 
+ego9 <- make_ego_graph(dr, order=1, c("Capital Bra")) 
+plot(ego9[[1]], layout=layout_nicely, edge.arrow.size=.1) 
+``` 
+
+
 
