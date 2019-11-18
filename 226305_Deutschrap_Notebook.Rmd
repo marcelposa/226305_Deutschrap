@@ -1,0 +1,578 @@
+
+---
+title: "226305_Deutschrap"
+output: html_notebook
+editor_options: 
+  chunk_output_type: inline
+---
+
+
+```{r}
+# Laden der Packages
+library("igraph")
+library("igraphdata")
+library("visNetwork")
+```
+
+```{r}
+# Einlesen der Edge- und Nodelist
+edges <- read.csv("https://raw.githubusercontent.com/marcelposa/226305_Deutschrap/master/226305_Deutschrap_Edgelist.csv", header=T, as.is=T)
+nodes <- read.csv("https://raw.githubusercontent.com/marcelposa/226305_Deutschrap/master/226305_Deutschrap_Nodelist.csv", header=T, as.is=T)
+edgematrix <-as.matrix(edges)
+dr <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
+dr
+
+```
+
+```{r}
+# ?berpr?fen der Daten
+head(edges)
+head(nodes)
+```
+
+
+
+```{r}
+edgematrix <-as.matrix(edges)
+dr_ges <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
+dr_ges 
+
+# Einstellungen f?r das Layout mit visgraph / Erstellt den Graphen mit visgraph
+E(dr_ges)$arrow.size <- 0.1 # Die Pfeilspitzengr??e bei gerichteten Netzwerken.
+E(dr_ges)$color <- "grey" # Die Farbe der Kanten.
+V(dr_ges)$color <- "black" # Die Farbe der Knoten.
+V(dr_ges)$size <- 10 # Die Gr??e der Knoten.
+V(dr_ges)$frame.color <- "transparent" # Der Rahmen der Knoten.
+V(dr_ges)$label.color <- "black" # Die Farbe der Labels.
+visIgraph(dr_ges, type = "full") 
+```
+
+
+
+```{r } 
+
+edgematrix <-as.matrix(edges)
+dr8 <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
+dr8 
+
+# Gesamtnetzwerk; die Rapper mit den meisten indegrees werden mit rot hervorgehoben 
+# Einstellungen f?r das Layout mit visgraph / Erstellt den Graphen mit visgraph 
+E(dr8)$arrow.size <- 0.1 # Die Pfeilspitzengr??e bei gerichteten Netzwerken. 
+E(dr8)$color <- "grey" # Die Farbe der Kanten. 
+V(dr8)$color <- "black" # Die Farbe der Knoten. 
+V(dr8)$size <- 10 # Die Gr??e der Knoten.  
+V(dr8)$label.color <- "black" # Die Farbe der Labels. 
+V(dr8)[name == "Bushido"]$color <- "red" # Die Farbe f?r Bushido. 
+V(dr8)[name == "Summer Cem"]$color <- "red" # Die Farbe f?r Summer Cem 
+V(dr8)[name == "RAF Camora"]$color <- "red" # Die Farbe f?r RAF Camora. 
+V(dr8)[name == "Bonez MC"]$color <- "red" # Die Farbe f?r Bonez MC 
+V(dr8)[name == "Gzuz"]$color <- "red" # Die Farbe f?r GZUZ 
+V(dr8)[name == "Ufo361"]$color <- "red" # Die Farbe f?r Ufo 361 
+V(dr8)[name == "Olexesh"]$color <- "red" # Die Farbe f?r Olexesh 
+V(dr8)[name == "Capital Bra"]$color <- "red" # Die Farbe f?r Capital Bra. 
+V(dr8)[name == "Kool Savas"]$color <- "red" # Die Farbe f?r Kool Savas. 
+visIgraph(dr8, type = "full") 
+```
+
+```{r}
+list.vertex.attributes(dr8)
+dr8
+
+vertex_attr(dr8)
+dr_nur8 <- delete_vertices(dr8, V(dr8)[name != "RAF Camora" & name != "Bushido" & name != "Ufo361" & name != "Kool Savas" & name != "Olexesh" & name != "Capital Bra" & name != "Gzuz" & name != "Summer Cem" & name != "Bonez MC"])
+dr_nur8
+plot(dr_nur8)
+```
+
+
+```{r Gesamtnetzwerk Genre nach Farben}
+edgematrix <-as.matrix(edges)
+dr <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
+dr 
+
+# Einstellungen f?r das Layout mit visgraph / Erstellt den Graphen mit visgraph
+E(dr)$arrow.size <- 0.1 # Die Pfeilspitzengr??e bei gerichteten Netzwerken.
+E(dr)$color <- "grey" # Die Farbe der Kanten.
+V(dr)[subgenre == "Strassenrap"]$color <- "blue" # Die Farbe der Knoten.
+V(dr)[subgenre == "Mainstream/Entertainment"]$color <- "red" # Die Farbe der Knote
+V(dr)[subgenre == "Oldschool"]$color <- "green" # Die Farbe der Knoten.
+V(dr)[subgenre == "Battlerap"]$color <- "yellow" # Die Farbe der Knote
+V(dr)[subgenre == "Conscious"]$color <- "pink" # Die Farbe der Knoten.
+V(dr)[subgenre == "Trap"]$color <- "black" # Die Farbe der Knote
+V(dr)[subgenre == "Afrotrap/Dancehall"]$color <- "purple" # Die Farbe der Knoten.
+V(dr)$size <- 10 # Die Gr??e der Knoten.
+V(dr)$frame.color <- "transparent" # Der Rahmen der Knoten.
+V(dr)$label.color <- "black" # Die Farbe der Labels.
+visIgraph(dr, type = "full") 
+```
+
+
+
+
+
+```{r Kapitel 3: Teilnetzwerke Genre Strassenrap (delete_vertices)}
+# Zeigt uns die Vertex-Attribute des Unternetzwerks "dr" an.
+list.vertex.attributes(dr)
+dr
+
+vertex_attr(dr)
+# entfernt alle au?er Rapper mit Genre Strassenrap:
+dr_strassenrap <- delete_vertices(dr, V(dr)[ subgenre != "Strassenrap"])
+# != alles auschlie?en bis auf == nur das ausschlie?en 
+dr_strassenrap
+
+# Einstellungen f?r das Layout mit visgraph / Erstellt den Graphen mit visgraph
+E(dr_strassenrap)$arrow.size <- 0.05 # Die Pfeilspitzengr??e bei gerichteten Netzwerken.
+E(dr_strassenrap)$color <- "grey" # Die Farbe der Kanten.
+V(dr_strassenrap)$color <- "blue" # Die Farbe der Knoten.
+V(dr_strassenrap)$size <- 10 # Die Gr??e der Knoten.
+V(dr_strassenrap)$frame.color <- "transparent" # Der Rahmen der Knoten.
+V(dr_strassenrap)$label.color <- "black" # Die Farbe der Labels.
+visIgraph(dr_strassenrap, type = "full") 
+#visgraph ist wie plot in sch?n
+```
+```{r Teilnetzwerke Strassenrap + Mainstream (delete_vertices)}
+# Zeigt uns die Vertex-Attribute des Unternetzwerks "dr" an.
+list.vertex.attributes(dr)
+dr
+
+vertex_attr(dr)
+# entfernt alle au?er Rapper mit Genre Strassenrap und Mainstream:
+dr_sm <- delete_vertices(dr, V(dr)[ subgenre != "Strassenrap" & subgenre != "Mainstream/Entertainment"])
+dr_sm
+
+# Einstellungen f?r das Layout mit visgraph / Erstellt den Graphen mit visgraph
+E(dr_sm)$arrow.size <- 0.05 # Die Pfeilspitzengr??e bei gerichteten Netzwerken.
+E(dr_sm)$color <- "grey" # Die Farbe der Kanten.
+V(dr_sm)[subgenre == "Strassenrap"]$color <- "blue" # Die Farbe der Knoten.
+V(dr_sm)[subgenre == "Mainstream/Entertainment"]$color <- "red" # Die Farbe der Knote
+V(dr_sm)$size <- 10 # Die Gr??e der Knoten.
+V(dr_sm)$frame.color <- "transparent" # Der Rahmen der Knoten.
+V(dr_sm)$label.color <- "black" # Die Farbe der Labels.
+visIgraph(dr_sm, type = "full") 
+#plot in sch?n
+```
+
+```{r Kapitel 3: Teilnetzw+erke Genre Afrotrap/Dancehall (delete_vertices)}
+# Zeigt uns die Vertex-Attribute des Unternetzwerks "dr" an.
+list.vertex.attributes(dr)
+dr
+
+vertex_attr(dr)
+# entfernt alle au?er Rapper mit Genre Afrotrap/Dancehall:
+dr_ad <- delete_vertices(dr, V(dr)[ subgenre != "Afrotrap/Dancehall"])
+# != alles auschlie?en bis auf == nur das ausschlie?en 
+dr_ad
+
+# Einstellungen f?r das Layout mit visgraph / Erstellt den Graphen mit visgraph
+E(dr_ad)$arrow.size <- 0.05 # Die Pfeilspitzengr??e bei gerichteten Netzwerken.
+E(dr_ad)$color <- "grey" # Die Farbe der Kanten.
+V(dr_ad)$color <- "purple" # Die Farbe der Knoten.
+V(dr_ad)$size <- 10 # Die Gr??e der Knoten.
+V(dr_ad)$frame.color <- "transparent" # Der Rahmen der Knoten.
+V(dr_ad)$label.color <- "black" # Die Farbe der Labels.
+visIgraph(dr_ad, type = "full") 
+#visgraph ist wie plot in sch?n
+```
+
+
+```{r Kapitel 3: Teilnetzwerke Genre Oldschool (delete_vertices)}
+# Zeigt uns die Vertex-Attribute des Unternetzwerks "dr" an.
+list.vertex.attributes(dr)
+dr
+
+vertex_attr(dr)
+# entfernt alle au?er Rapper mit Genre Oldschool:
+dr_oldschool <- delete_vertices(dr, V(dr)[ subgenre != "Oldschool"])
+# != alles auschlie?en bis auf == nur das ausschlie?en 
+dr_oldschool
+
+# Einstellungen f?r das Layout mit visgraph / Erstellt den Graphen mit visgraph
+E(dr_oldschool)$arrow.size <- 0.05 # Die Pfeilspitzengr??e bei gerichteten Netzwerken.
+E(dr_oldschool)$color <- "grey" # Die Farbe der Kanten.
+V(dr_oldschool)$color <- "green" # Die Farbe der Knoten.
+V(dr_oldschool)$size <- 10 # Die Gr??e der Knoten.
+V(dr_oldschool)$frame.color <- "transparent" # Der Rahmen der Knoten.
+V(dr_oldschool)$label.color <- "black" # Die Farbe der Labels.
+visIgraph(dr_oldschool, type = "full") 
+#visgraph ist wie plot in sch?n
+```
+
+```{r Kapitel 3: Teilnetzwerke Genre Afrotrap/Dancehall und Mainstream/Entertainment (delete_vertices)}
+# Zeigt uns die Vertex-Attribute des Unternetzwerks "dr" an.
+list.vertex.attributes(dr)
+dr
+
+vertex_attr(dr)
+# entfernt alle au?er Rapper mit Genre Mainstream/Entertainment & Afrotrap/Dancehall:
+dr_am <- delete_vertices(dr, V(dr)[ subgenre != "Afrotrap/Dancehall" & subgenre != "Mainstream/Entertainment"])
+# != alles auschlie?en bis auf == nur das ausschlie?en 
+dr_am 
+
+# Einstellungen f?r das Layout mit visgraph / Erstellt den Graphen mit visgraph
+E(dr_am)$arrow.size <- 0.05 # Die Pfeilspitzengr??e bei gerichteten Netzwerken.
+E(dr_am)$color <- "grey" # Die Farbe der Kanten.
+V(dr_am)[subgenre == "Afrotrap/Dancehall"]$color <- "purple" # Die Farbe der Knoten.
+V(dr_am)[subgenre == "Mainstream/Entertainment"]$color <- "red" # Die Farbe der Knoten
+V(dr_am)$size <- 10 # Die Gr??e der Knoten.
+V(dr_am)$frame.color <- "transparent" # Der Rahmen der Knoten.
+V(dr_am)$label.color <- "black" # Die Farbe der Labels.
+visIgraph(dr_am, type = "full") 
+#visgraph ist wie plot in sch?n
+```
+
+
+
+
+
+```{r Kapitel 3: Ego-Netzwerke Olexesh}
+
+# zeigt die Knoten mit den meisten Verbindungen, ?hnlich wie der degree Wert.
+ego_size(dr)
+
+# Wir stellen fest, dass Knoten 18 die meisten degrees hat. Deshalb wollen wir ein Ego-Netzwerk aus diesem Graph generieren.
+degree(dr)
+
+# selektiert aus dem Netzwerk h3 alle Knoten, die mit Knoten 18 ?ber einen Schritt verbunden sind.
+dr_ol <- make_ego_graph(dr, order = 1, nodes = V(dr)$name == "Olexesh", mode ="all")
+dr_ol[[1]]
+
+E(dr_ol[[1]])$arrow.size <- 0.1 # Die Pfeilspitzengr??e bei gerichteten Netzwerken.
+E(dr_ol[[1]])$color <- "grey" # Die Farbe der Kanten.
+V(dr_ol[[1]])[subgenre == "Strassenrap"]$color <- "blue" # Die Farbe der Knoten.
+V(dr_ol[[1]])[subgenre == "Mainstream/Entertainment"]$color <- "red" # Die Farbe der Knote
+V(dr_ol[[1]])[subgenre == "Oldschool"]$color <- "green" # Die Farbe der Knoten.
+V(dr_ol[[1]])[subgenre == "Battlerap"]$color <- "yellow" # Die Farbe der Knote
+V(dr_ol[[1]])[subgenre == "Conscious"]$color <- "pink" # Die Farbe der Knoten.
+V(dr_ol[[1]])[subgenre == "Trap"]$color <- "black" # Die Farbe der Knote
+V(dr_ol[[1]])[subgenre == "Afrotrap/Dancehall"]$color <- "purple" # Die Farbe der Knoten.
+V(dr_ol[[1]])$size <- 10 # Die Gr??e der Knoten.
+V(dr_ol[[1]])$frame.color <- "transparent" # Der Rahmen der Knoten.
+V(dr_ol[[1]])$label.color <- "black" # Die Farbe der Labels.
+visIgraph(dr_ol[[1]], type = "full")
+
+```
+
+```{r Kapitel 3: Ego-Netzwerke GZUZ}
+
+
+dr_gzuz <- make_ego_graph(dr, order = 1, nodes = V(dr)$name == "Gzuz", mode ="all")
+dr_gzuz[[1]]
+
+E(dr_gzuz[[1]])$arrow.size <- 0.1 # Die Pfeilspitzengr??e bei gerichteten Netzwerken.
+E(dr_gzuz[[1]])$color <- "grey" # Die Farbe der Kanten.
+V(dr_gzuz[[1]])[subgenre == "Strassenrap"]$color <- "blue" # Die Farbe der Knoten.
+V(dr_gzuz[[1]])[subgenre == "Mainstream/Entertainment"]$color <- "red" # Die Farbe der Knote
+V(dr_gzuz[[1]])[subgenre == "Oldschool"]$color <- "green" # Die Farbe der Knoten.
+V(dr_gzuz[[1]])[subgenre == "Battlerap"]$color <- "yellow" # Die Farbe der Knote
+V(dr_gzuz[[1]])[subgenre == "Conscious"]$color <- "pink" # Die Farbe der Knoten.
+V(dr_gzuz[[1]])[subgenre == "Trap"]$color <- "black" # Die Farbe der Knote
+V(dr_gzuz[[1]])[subgenre == "Afrotrap/Dancehall"]$color <- "purple" # Die Farbe der Knoten.
+V(dr_gzuz[[1]])$size <- 10 # Die Gr??e der Knoten.
+V(dr_gzuz[[1]])$frame.color <- "transparent" # Der Rahmen der Knoten.
+V(dr_gzuz[[1]])$label.color <- "black" # Die Farbe der Labels.
+visIgraph(dr_gzuz[[1]], type = "full")
+
+```
+
+
+```{r Kapitel 3: Ego-Netzwerke Bushido}
+dr_bu <- make_ego_graph(dr, order = 1, nodes = V(dr)$name == "Bushido", mode ="all")
+dr_bu[[1]]
+
+E(dr_bu[[1]])$arrow.size <- 0.1 # Die Pfeilspitzengr??e bei gerichteten Netzwerken.
+E(dr_bu[[1]])$color <- "grey" # Die Farbe der Kanten.
+V(dr_bu[[1]])[subgenre == "Strassenrap"]$color <- "blue" # Die Farbe der Knoten.
+V(dr_bu[[1]])[subgenre == "Mainstream/Entertainment"]$color <- "red" # Die Farbe der Knote
+V(dr_bu[[1]])[subgenre == "Oldschool"]$color <- "green" # Die Farbe der Knoten.
+V(dr_bu[[1]])[subgenre == "Battlerap"]$color <- "yellow" # Die Farbe der Knote
+V(dr_bu[[1]])[subgenre == "Conscious"]$color <- "pink" # Die Farbe der Knoten.
+V(dr_bu[[1]])[subgenre == "Trap"]$color <- "black" # Die Farbe der Knote
+V(dr_bu[[1]])[subgenre == "Afrotrap/Dancehall"]$color <- "purple" # Die Farbe der Knoten.
+V(dr_bu[[1]])$size <- 10 # Die Gr??e der Knoten.
+V(dr_bu[[1]])$frame.color <- "transparent" # Der Rahmen der Knoten.
+V(dr_bu[[1]])$label.color <- "black" # Die Farbe der Labels.
+visIgraph(dr_bu[[1]], type = "full")
+
+```
+
+
+
+```{r Kapitel 3: Ego-Netzwerke Summer Cem}
+dr_sc <- make_ego_graph(dr, order = 1, nodes = V(dr)$name == "Summer Cem", mode ="all")
+dr_sc[[1]]
+
+E(dr_sc[[1]])$arrow.size <- 0.1 # Die Pfeilspitzengr??e bei gerichteten Netzwerken.
+E(dr_sc[[1]])$color <- "grey" # Die Farbe der Kanten.
+V(dr_sc[[1]])[subgenre == "Strassenrap"]$color <- "blue" # Die Farbe der Knoten.
+V(dr_sc[[1]])[subgenre == "Mainstream/Entertainment"]$color <- "red" # Die Farbe der Knote
+V(dr_sc[[1]])[subgenre == "Oldschool"]$color <- "green" # Die Farbe der Knoten.
+V(dr_sc[[1]])[subgenre == "Battlerap"]$color <- "yellow" # Die Farbe der Knote
+V(dr_sc[[1]])[subgenre == "Conscious"]$color <- "pink" # Die Farbe der Knoten.
+V(dr_sc[[1]])[subgenre == "Trap"]$color <- "black" # Die Farbe der Knote
+V(dr_sc[[1]])[subgenre == "Afrotrap/Dancehall"]$color <- "purple" # Die Farbe der Knoten.
+V(dr_sc[[1]])$size <- 10 # Die Gr??e der Knoten.
+V(dr_sc[[1]])$frame.color <- "transparent" # Der Rahmen der Knoten.
+V(dr_sc[[1]])$label.color <- "black" # Die Farbe der Labels.
+visIgraph(dr_sc[[1]], type = "full") 
+
+```
+```{r Kapitel 3: Ego-Netzwerke RAF Camora}
+
+
+dr_raf <- make_ego_graph(dr, order = 1, nodes = V(dr)$name == "RAF Camora", mode ="all")
+dr_raf[[1]]
+
+E(dr_raf[[1]])$arrow.size <- 0.1 # Die Pfeilspitzengr??e bei gerichteten Netzwerken.
+E(dr_raf[[1]])$color <- "grey" # Die Farbe der Kanten.
+V(dr_raf[[1]])[subgenre == "Strassenrap"]$color <- "blue" # Die Farbe der Knoten.
+V(dr_raf[[1]])[subgenre == "Mainstream/Entertainment"]$color <- "red" # Die Farbe der Knote
+V(dr_raf[[1]])[subgenre == "Oldschool"]$color <- "green" # Die Farbe der Knoten.
+V(dr_raf[[1]])[subgenre == "Battlerap"]$color <- "yellow" # Die Farbe der Knote
+V(dr_raf[[1]])[subgenre == "Conscious"]$color <- "pink" # Die Farbe der Knoten.
+V(dr_raf[[1]])[subgenre == "Trap"]$color <- "black" # Die Farbe der Knote
+V(dr_raf[[1]])[subgenre == "Afrotrap/Dancehall"]$color <- "purple" # Die Farbe der Knoten.
+V(dr_raf[[1]])$size <- 10 # Die Gr??e der Knoten.
+V(dr_raf[[1]])$frame.color <- "transparent" # Der Rahmen der Knoten.
+V(dr_raf[[1]])$label.color <- "black" # Die Farbe der Labels.
+visIgraph(dr_raf[[1]], type = "full")
+
+```
+
+```{r Kapitel 3: Ego-Netzwerke Bonez MC}
+dr_bmc <- make_ego_graph(dr, order = 1, nodes = V(dr)$name == "Bonez MC", mode ="all")
+dr_bmc[[1]]
+
+E(dr_bmc[[1]])$arrow.size <- 0.1 # Die Pfeilspitzengr??e bei gerichteten Netzwerken.
+E(dr_bmc[[1]])$color <- "grey" # Die Farbe der Kanten.
+V(dr_bmc[[1]])[subgenre == "Strassenrap"]$color <- "blue" # Die Farbe der Knoten.
+V(dr_bmc[[1]])[subgenre == "Mainstream/Entertainment"]$color <- "red" # Die Farbe der Knote
+V(dr_bmc[[1]])[subgenre == "Oldschool"]$color <- "green" # Die Farbe der Knoten.
+V(dr_bmc[[1]])[subgenre == "Battlerap"]$color <- "yellow" # Die Farbe der Knote
+V(dr_bmc[[1]])[subgenre == "Conscious"]$color <- "pink" # Die Farbe der Knoten.
+V(dr_bmc[[1]])[subgenre == "Trap"]$color <- "black" # Die Farbe der Knote
+V(dr_bmc[[1]])[subgenre == "Afrotrap/Dancehall"]$color <- "purple" # Die Farbe der Knoten.
+V(dr_bmc[[1]])$size <- 10 # Die Gr??e der Knoten.
+V(dr_bmc[[1]])$frame.color <- "transparent" # Der Rahmen der Knoten.
+V(dr_bmc[[1]])$label.color <- "black" # Die Farbe der Labels.
+visIgraph(dr_bmc[[1]], type = "full") 
+
+```
+```{r Kapitel 3: Ego-Netzwerke Ufo 361}
+dr_ufo <- make_ego_graph(dr, order = 1, nodes = V(dr)$name == "Ufo361", mode ="all")
+dr_ufo[[1]]
+
+E(dr_ufo[[1]])$arrow.size <- 0.1 # Die Pfeilspitzengr??e bei gerichteten Netzwerken.
+E(dr_ufo[[1]])$color <- "grey" # Die Farbe der Kanten.
+V(dr_ufo[[1]])[subgenre == "Strassenrap"]$color <- "blue" # Die Farbe der Knoten.
+V(dr_ufo[[1]])[subgenre == "Mainstream/Entertainment"]$color <- "red" # Die Farbe der Knote
+V(dr_ufo[[1]])[subgenre == "Oldschool"]$color <- "green" # Die Farbe der Knoten.
+V(dr_ufo[[1]])[subgenre == "Battlerap"]$color <- "yellow" # Die Farbe der Knote
+V(dr_ufo[[1]])[subgenre == "Conscious"]$color <- "pink" # Die Farbe der Knoten.
+V(dr_ufo[[1]])[subgenre == "Trap"]$color <- "black" # Die Farbe der Knote
+V(dr_ufo[[1]])[subgenre == "Afrotrap/Dancehall"]$color <- "purple" # Die Farbe der Knoten.
+V(dr_ufo[[1]])$size <- 10 # Die Gr??e der Knoten.
+V(dr_ufo[[1]])$frame.color <- "transparent" # Der Rahmen der Knoten.
+V(dr_ufo[[1]])$label.color <- "black" # Die Farbe der Labels.
+visIgraph(dr_ufo[[1]], type = "full")  
+
+```
+
+```{r Kapitel 3: Ego-Netzwerke Kool Savas}
+dr_ks <- make_ego_graph(dr, order = 1, nodes = V(dr)$name == "Kool Savas", mode ="all")
+dr_ks[[1]]
+
+E(dr_ks[[1]])$arrow.size <- 0.1 # Die Pfeilspitzengr??e bei gerichteten Netzwerken.
+E(dr_ks[[1]])$color <- "grey" # Die Farbe der Kanten.
+V(dr_ks[[1]])[subgenre == "Strassenrap"]$color <- "blue" # Die Farbe der Knoten.
+V(dr_ks[[1]])[subgenre == "Mainstream/Entertainment"]$color <- "red" # Die Farbe der Knote
+V(dr_ks[[1]])[subgenre == "Oldschool"]$color <- "green" # Die Farbe der Knoten.
+V(dr_ks[[1]])[subgenre == "Battlerap"]$color <- "yellow" # Die Farbe der Knote
+V(dr_ks[[1]])[subgenre == "Conscious"]$color <- "pink" # Die Farbe der Knoten.
+V(dr_ks[[1]])[subgenre == "Trap"]$color <- "black" # Die Farbe der Knote
+V(dr_ks[[1]])[subgenre == "Afrotrap/Dancehall"]$color <- "purple" # Die Farbe der Knoten.
+V(dr_ks[[1]])$size <- 10 # Die Gr??e der Knoten.
+V(dr_ks[[1]])$frame.color <- "transparent" # Der Rahmen der Knoten.
+V(dr_ks[[1]])$label.color <- "black" # Die Farbe der Labels.
+visIgraph(dr_ks[[1]], type = "full") 
+
+```
+```{r Kapitel 3: Ego-Netzwerke Capital Bra}
+dr_cb <- make_ego_graph(dr, order = 1, nodes = V(dr)$name == "Capital Bra", mode ="all")
+dr_cb[[1]]
+
+E(dr_cb[[1]])$arrow.size <- 0.1 # Die Pfeilspitzengr??e bei gerichteten Netzwerken.
+E(dr_cb[[1]])$color <- "grey" # Die Farbe der Kanten.
+V(dr_cb[[1]])[subgenre == "Strassenrap"]$color <- "blue" # Die Farbe der Knoten.
+V(dr_cb[[1]])[subgenre == "Mainstream/Entertainment"]$color <- "red" # Die Farbe der Knote
+V(dr_cb[[1]])[subgenre == "Oldschool"]$color <- "green" # Die Farbe der Knoten.
+V(dr_cb[[1]])[subgenre == "Battlerap"]$color <- "yellow" # Die Farbe der Knote
+V(dr_cb[[1]])[subgenre == "Conscious"]$color <- "pink" # Die Farbe der Knoten.
+V(dr_cb[[1]])[subgenre == "Trap"]$color <- "black" # Die Farbe der Knote
+V(dr_cb[[1]])[subgenre == "Afrotrap/Dancehall"]$color <- "purple" # Die Farbe der Knoten.
+V(dr_cb[[1]])$size <- 10 # Die Gr??e der Knoten.
+V(dr_cb[[1]])$frame.color <- "transparent" # Der Rahmen der Knoten.
+V(dr_cb[[1]])$label.color <- "black" # Die Farbe der Labels.
+visIgraph(dr_cb[[1]], type = "full") 
+
+```
+
+```{r Egonetzwerk RAF nach St?dten}
+
+dr_r <- make_ego_graph(dr_ges, order = 1, nodes = V(dr)$name == "RAF Camora", mode ="all")
+dr_r[[1]]
+
+E(dr_r[[1]])$arrow.size <- 0.1 # Die Pfeilspitzengr??e bei gerichteten Netzwerken.
+E(dr_r[[1]])$color <- "grey" # Die Farbe der Kanten.
+V(dr_r[[1]])[city == "Hamburg"]$color <- "yellow"
+V(dr_r[[1]])[city == "Berlin"]$color <- "blue"
+V(dr_r[[1]])[city == "Frankfurt"]$color <- "green"
+V(dr_r[[1]])[city == "Stuttgart" & city == "Bietigheim-Bissingen" & city == "Reutlingen" & city == "G?ppingen"]$color <- "lightblue"
+V(dr_r[[1]])$size <- 10 # Die Gr??e der Knoten.
+V(dr_r[[1]])$frame.color <- "transparent" # Der Rahmen der Knoten.
+V(dr_r[[1]])$label.color <- "black" # Die Farbe der Labels.
+visIgraph(dr_r[[1]], type = "full") 
+
+
+
+```
+
+```{r Egonetzwerk Bushido nach St?dten}
+dr_b <- make_ego_graph(dr_ges, order = 1, nodes = V(dr)$name == "Bushido", mode ="all")
+dr_b[[1]]
+
+E(dr_b[[1]])$arrow.size <- 0.1 # Die Pfeilspitzengr??e bei gerichteten Netzwerken.
+E(dr_b[[1]])$color <- "grey" # Die Farbe der Kanten.
+V(dr_b[[1]])[city == "Hamburg"]$color <- "yellow"
+V(dr_b[[1]])[city == "Berlin"]$color <- "blue"
+V(dr_b[[1]])[city == "Frankfurt"]$color <- "green"
+V(dr_b[[1]])[city == "Stuttgart" & city == "Bietigheim-Bissingen" & city == "Reutlingen" & city == "G?ppingen"]$color <- "lightblue"
+V(dr_b[[1]])$size <- 10 # Die Gr??e der Knoten.
+V(dr_b[[1]])$frame.color <- "transparent" # Der Rahmen der Knoten.
+V(dr_b[[1]])$label.color <- "black" # Die Farbe der Labels.
+visIgraph(dr_b[[1]], type = "full") 
+
+```
+
+```{r Egonetzwerk Summer Cem nach St?dten}
+dr_sc1 <- make_ego_graph(dr_ges, order = 1, nodes = V(dr)$name == "Summer Cem", mode ="all")
+dr_sc1[[1]]
+
+E(dr_sc1[[1]])$arrow.size <- 0.1 # Die Pfeilspitzengr??e bei gerichteten Netzwerken.
+E(dr_sc1[[1]])$color <- "grey" # Die Farbe der Kanten.
+V(dr_sc1[[1]])[city == "Hamburg"]$color <- "yellow"
+V(dr_sc1[[1]])[city == "Berlin"]$color <- "blue"
+V(dr_sc1[[1]])[city == "Frankfurt"]$color <- "green"
+V(dr_sc1[[1]])[city == "Stuttgart" & city == "Bietigheim-Bissingen" & city == "Reutlingen" & city == "G?ppingen"]$color <- "lightblue"
+V(dr_sc1[[1]])$size <- 10 # Die Gr??e der Knoten.
+V(dr_sc1[[1]])$frame.color <- "transparent" # Der Rahmen der Knoten.
+V(dr_sc1[[1]])$label.color <- "black" # Die Farbe der Labels.
+visIgraph(dr_sc1[[1]], type = "full")
+
+```
+
+```{r Egonetzwerk Bonez MC nach St?dten}
+dr_bm <- make_ego_graph(dr_ges, order = 1, nodes = V(dr)$name == "Bonez MC", mode ="all")
+dr_bm[[1]]
+
+E(dr_bm[[1]])$arrow.size <- 0.1 # Die Pfeilspitzengr??e bei gerichteten Netzwerken.
+E(dr_bm[[1]])$color <- "grey" # Die Farbe der Kanten.
+V(dr_bm[[1]])[city == "Hamburg"]$color <- "yellow"
+V(dr_bm[[1]])[city == "Berlin"]$color <- "blue"
+V(dr_bm[[1]])[city == "Frankfurt"]$color <- "green"
+V(dr_bm[[1]])[city == "Stuttgart" & city == "Bietigheim-Bissingen" & city == "Reutlingen" & city == "G?ppingen"]$color <- "lightblue"
+V(dr_bm[[1]])$size <- 10 # Die Gr??e der Knoten.
+V(dr_bm[[1]])$frame.color <- "transparent" # Der Rahmen der Knoten.
+V(dr_bm[[1]])$label.color <- "black" # Die Farbe der Labels.
+visIgraph(dr_bm[[1]], type = "full")
+
+```
+
+```{r Egonetzwerk Gzuz nach St?dten}
+dr_g <- make_ego_graph(dr_ges, order = 1, nodes = V(dr)$name == "Gzuz", mode ="all")
+dr_g[[1]]
+
+E(dr_g[[1]])$arrow.size <- 0.1 # Die Pfeilspitzengr??e bei gerichteten Netzwerken.
+E(dr_g[[1]])$color <- "grey" # Die Farbe der Kanten.
+V(dr_g[[1]])[city == "Hamburg"]$color <- "yellow"
+V(dr_g[[1]])[city == "Berlin"]$color <- "blue"
+V(dr_g[[1]])[city == "Frankfurt"]$color <- "green"
+V(dr_g[[1]])[city == "Stuttgart" & city == "Bietigheim-Bissingen" & city == "Reutlingen" & city == "G?ppingen"]$color <- "lightblue"
+V(dr_g[[1]])$size <- 10 # Die Gr??e der Knoten.
+V(dr_g[[1]])$frame.color <- "transparent" # Der Rahmen der Knoten.
+V(dr_g[[1]])$label.color <- "black" # Die Farbe der Labels.
+visIgraph(dr_g[[1]], type = "full")
+
+
+```
+
+```{r Egonetzwerk Ufo361 nach St?dten}
+dr_u <- make_ego_graph(dr_ges, order = 1, nodes = V(dr)$name == "Ufo361", mode ="all")
+dr_u[[1]]
+
+E(dr_u[[1]])$arrow.size <- 0.1 # Die Pfeilspitzengr??e bei gerichteten Netzwerken.
+E(dr_u[[1]])$color <- "grey" # Die Farbe der Kanten.
+V(dr_u[[1]])[city == "Hamburg"]$color <- "yellow"
+V(dr_u[[1]])[city == "Berlin"]$color <- "blue"
+V(dr_u[[1]])[city == "Frankfurt"]$color <- "green"
+V(dr_u[[1]])[city == "Stuttgart" & city == "Bietigheim-Bissingen" & city == "Reutlingen" & city == "G?ppingen"]$color <- "lightblue"
+V(dr_u[[1]])$size <- 10 # Die Gr??e der Knoten.
+V(dr_u[[1]])$frame.color <- "transparent" # Der Rahmen der Knoten.
+V(dr_u[[1]])$label.color <- "black" # Die Farbe der Labels.
+visIgraph(dr_u[[1]], type = "full")
+
+```
+
+```{r Egometzwerk Olexesh nach St?dten}
+dr_o <- make_ego_graph(dr_ges, order = 1, nodes = V(dr)$name == "Olexesh", mode ="all")
+dr_o[[1]]
+
+E(dr_o[[1]])$arrow.size <- 0.1 # Die Pfeilspitzengr??e bei gerichteten Netzwerken.
+E(dr_o[[1]])$color <- "grey" # Die Farbe der Kanten.
+V(dr_o[[1]])[city == "Hamburg"]$color <- "yellow"
+V(dr_o[[1]])[city == "Berlin"]$color <- "blue"
+V(dr_o[[1]])[city == "Frankfurt"]$color <- "green"
+V(dr_o[[1]])[city == "Stuttgart" & city == "Bietigheim-Bissingen" & city == "Reutlingen" & city == "G?ppingen"]$color <- "lightblue"
+V(dr_o[[1]])$size <- 10 # Die Gr??e der Knoten.
+V(dr_o[[1]])$frame.color <- "transparent" # Der Rahmen der Knoten.
+V(dr_o[[1]])$label.color <- "black" # Die Farbe der Labels.
+visIgraph(dr_o[[1]], type = "full")
+
+
+```
+
+```{r Egonetzwerk Capital Bra nach St?dten}
+dr_c <- make_ego_graph(dr_ges, order = 1, nodes = V(dr)$name == "Capital Bra", mode ="all")
+dr_c[[1]]
+
+E(dr_c[[1]])$arrow.size <- 0.1 # Die Pfeilspitzengr??e bei gerichteten Netzwerken.
+E(dr_c[[1]])$color <- "grey" # Die Farbe der Kanten.
+V(dr_c[[1]])[city == "Hamburg"]$color <- "yellow"
+V(dr_c[[1]])[city == "Berlin"]$color <- "blue"
+V(dr_c[[1]])[city == "Frankfurt"]$color <- "green"
+V(dr_c[[1]])[city == "Stuttgart" & city == "Bietigheim-Bissingen" & city == "Reutlingen" & city == "G?ppingen"]$color <- "lightblue"
+V(dr_c[[1]])$size <- 10 # Die Gr??e der Knoten.
+V(dr_c[[1]])$frame.color <- "transparent" # Der Rahmen der Knoten.
+V(dr_c[[1]])$label.color <- "black" # Die Farbe der Labels.
+visIgraph(dr_c[[1]], type = "full")
+```
+
+```{r Egonetzwerk Kool Savas nach St?dten}
+dr_k <- make_ego_graph(dr_ges, order = 1, nodes = V(dr)$name == "Kool Savas", mode ="all")
+dr_k[[1]]
+
+E(dr_k[[1]])$arrow.size <- 0.1 # Die Pfeilspitzengr??e bei gerichteten Netzwerken.
+E(dr_k[[1]])$color <- "grey" # Die Farbe der Kanten.
+V(dr_k[[1]])[city == "Hamburg"]$color <- "yellow"
+V(dr_k[[1]])[city == "Berlin"]$color <- "blue"
+V(dr_k[[1]])[city == "Frankfurt"]$color <- "green"
+V(dr_k[[1]])[city == "Stuttgart" & city == "Bietigheim-Bissingen" & city == "Reutlingen" & city == "G?ppingen"]$color <- "lightblue"
+V(dr_k[[1]])$size <- 10 # Die Gr??e der Knoten.
+V(dr_k[[1]])$frame.color <- "transparent" # Der Rahmen der Knoten.
+V(dr_k[[1]])$label.color <- "black" # Die Farbe der Labels.
+visIgraph(dr_k[[1]], type = "full")
+
+```
+
+
+
