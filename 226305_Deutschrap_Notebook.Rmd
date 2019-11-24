@@ -77,11 +77,19 @@ visIgraph(dr8, type = "full")
 ```{r}
 list.vertex.attributes(dr8)
 dr8
-
 vertex_attr(dr8)
 dr_nur8 <- delete_vertices(dr8, V(dr8)[name != "RAF Camora" & name != "Bushido" & name != "Ufo361" & name != "Kool Savas" & name != "Olexesh" & name != "Capital Bra" & name != "Gzuz" & name != "Summer Cem" & name != "Bonez MC"])
 dr_nur8
-plot(dr_nur8)
+
+l <- layout_with_fr(dr_nur8)
+plot(dr_nur8,  
+     layout=l*3)
+E(dr8)$arrow.size <- 0.1 # Die Pfeilspitzengr??e bei gerichteten Netzwerken. 
+E(dr8)$color <- "grey" # Die Farbe der Kanten. 
+V(dr8)$color <- "black" # Die Farbe der Knoten. 
+V(dr8)$size <- 10 # Die Gr??e der Knoten.  
+V(dr8)$label.color <- "black" # Die Farbe der Labels. 
+visIgraph(dr_nur8, type = "full")
 ```
 
 
